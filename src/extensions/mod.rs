@@ -35,16 +35,29 @@ pub fn extension_handler<F>(
             }
         }
     }
-    if args.yum_packages && crate::extensions::yum::is_yum_primary_xml(path) {
-        let packages = yum::parse_package(path, relative, url);
-        match packages {
-            Err(e) => {
-                warn!("Failed to parse YUM primary.xml {:?}: {:?}", path, e);
-            }
-            Ok(packages) => {
-                for package in packages {
-                    info!("YUM package: {:?}", package);
-                    push_func(&package.into());
+    if args.yum_packages {
+        let is_primary = crate::extensions::yum::is_yum_primary_xml(path);
+        let is_repomd = crate::extensions::yum::is_yum_repomd_xml(path);
+        match (is_primary, is_repomd) {
+            (false, false) => (),
+            (p, r) => {
+                assert!(!(p && r), "File is both primary and repomd");
+                let xml_type = if p {
+                    crate::extensions::yum::YumXmlType::Primary
+                } else {
+                    crate::extensions::yum::YumXmlType::Repomd
+                };
+                let packages = yum::parse_package(path, relative, url, xml_type);
+                match packages {
+                    Err(e) => {
+                        warn!("Failed to parse YUM file {:?}: {:?}", path, e);
+                    }
+                    Ok(packages) => {
+                        for package in packages {
+                            info!("YUM package: {:?}", package);
+                            push_func(&package.into());
+                        }
+                    }
                 }
             }
         }
