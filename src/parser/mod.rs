@@ -12,6 +12,7 @@ pub mod directory_lister;
 pub mod docker;
 pub mod lighttpd;
 pub mod nginx;
+pub mod fancyindex;
 
 #[derive(Debug)]
 pub enum ListResult {
@@ -34,6 +35,7 @@ pub enum ParserType {
     DirectoryLister,
     Lighttpd,
     Caddy,
+    FancyIndex,
 }
 
 impl ParserType {
@@ -48,6 +50,7 @@ impl ParserType {
             }
             Self::Lighttpd => Box::<lighttpd::LighttpdListingParser>::default(),
             Self::Caddy => Box::<caddy::CaddyListingParser>::default(),
+            Self::FancyIndex => Box::<fancyindex::FancyIndexListingParser>::default(),
         }
     }
 }
