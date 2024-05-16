@@ -10,9 +10,9 @@ pub mod apache_f2;
 pub mod caddy;
 pub mod directory_lister;
 pub mod docker;
+pub mod fancyindex;
 pub mod lighttpd;
 pub mod nginx;
-pub mod fancyindex;
 
 #[derive(Debug)]
 pub enum ListResult {

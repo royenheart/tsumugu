@@ -79,26 +79,39 @@ impl Parser for FancyIndexListingParser {
 
 #[cfg(test)]
 mod tests {
-    use crate::listing::SizeUnit;
     use super::*;
+    use crate::listing::SizeUnit;
 
     #[test]
     fn test_njumirrors() {
         let client = reqwest::blocking::Client::new();
-        let items = FancyIndexListingParser.get_list(
-            &client,
-            &Url::parse("http://localhost:1921/bmclapi/").unwrap(),
-        ).unwrap();
+        let items = FancyIndexListingParser
+            .get_list(
+                &client,
+                &Url::parse("http://localhost:1921/bmclapi/").unwrap(),
+            )
+            .unwrap();
         match items {
             ListResult::List(items) => {
                 assert_eq!(items[0].name, "bouncycastle");
                 assert_eq!(items[0].type_, FileType::Directory);
                 assert_eq!(items[0].size, None);
-                assert_eq!(items[0].mtime, NaiveDateTime::parse_from_str("2024-04-23 19:01:54", "%Y-%m-%d %H:%M:%S").unwrap());
+                assert_eq!(
+                    items[0].mtime,
+                    NaiveDateTime::parse_from_str("2024-04-23 19:01:54", "%Y-%m-%d %H:%M:%S")
+                        .unwrap()
+                );
                 assert_eq!(items[items.len() - 1].name, "lwjgURL");
                 assert_eq!(items[items.len() - 1].type_, FileType::File);
-                assert_eq!(items[items.len() - 1].size, Some(FileSize::HumanizedBinary(1767.0, SizeUnit::B)));
-                assert_eq!(items[items.len() - 1].mtime, NaiveDateTime::parse_from_str("2021-04-30 20:55:32", "%Y-%m-%d %H:%M:%S").unwrap());
+                assert_eq!(
+                    items[items.len() - 1].size,
+                    Some(FileSize::HumanizedBinary(1767.0, SizeUnit::B))
+                );
+                assert_eq!(
+                    items[items.len() - 1].mtime,
+                    NaiveDateTime::parse_from_str("2021-04-30 20:55:32", "%Y-%m-%d %H:%M:%S")
+                        .unwrap()
+                );
             }
             _ => unreachable!(),
         }
@@ -107,20 +120,31 @@ mod tests {
     #[test]
     fn test_loongnix() {
         let client = reqwest::blocking::Client::new();
-        let items = FancyIndexListingParser.get_list(
-            &client,
-            &Url::parse("http://localhost:1921/loongnix/").unwrap(),
-        ).unwrap();
+        let items = FancyIndexListingParser
+            .get_list(
+                &client,
+                &Url::parse("http://localhost:1921/loongnix/").unwrap(),
+            )
+            .unwrap();
         match items {
             ListResult::List(items) => {
                 assert_eq!(items[0].name, "contrib");
                 assert_eq!(items[0].type_, FileType::Directory);
                 assert_eq!(items[0].size, None);
-                assert_eq!(items[0].mtime, NaiveDateTime::parse_from_str("2023-08-15 05:48", "%Y-%m-%d %H:%M").unwrap());
+                assert_eq!(
+                    items[0].mtime,
+                    NaiveDateTime::parse_from_str("2023-08-15 05:48", "%Y-%m-%d %H:%M").unwrap()
+                );
                 assert_eq!(items[items.len() - 1].name, "Release.gpg");
                 assert_eq!(items[items.len() - 1].type_, FileType::File);
-                assert_eq!(items[items.len() - 1].size, Some(FileSize::HumanizedBinary(659.0, SizeUnit::B)));
-                assert_eq!(items[items.len() - 1].mtime, NaiveDateTime::parse_from_str("2023-08-15 05:48", "%Y-%m-%d %H:%M").unwrap());
+                assert_eq!(
+                    items[items.len() - 1].size,
+                    Some(FileSize::HumanizedBinary(659.0, SizeUnit::B))
+                );
+                assert_eq!(
+                    items[items.len() - 1].mtime,
+                    NaiveDateTime::parse_from_str("2023-08-15 05:48", "%Y-%m-%d %H:%M").unwrap()
+                );
             }
             _ => unreachable!(),
         }
